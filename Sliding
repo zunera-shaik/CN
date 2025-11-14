@@ -1,0 +1,31 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+#define W 4
+
+int lost() { return rand() % 5 == 0; }
+
+int main() {
+    int n, s = 0, a = 0, i, send;
+    srand(time(NULL));
+
+    printf("Enter total frames: ");
+    scanf("%d", &n);
+
+    while (a < n) {
+        send = (n - s < W) ? (n - s) : W;
+
+        int err = -1;
+        for (i = 0; i < send; i++) {
+            if (lost()) { printf("F%d lost\n", s + i + 1); err = i; break; }
+            else printf("F%d ok\n", s + i + 1);
+        }
+
+        if (err == -1) { s += send; a += send; printf("ACK %d\n", send); }
+        else { s += err; a += err; printf("NACK %d\n", s + 1); }
+    }
+
+    printf("Done\n");
+    return 0;
+}
